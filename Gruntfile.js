@@ -1,6 +1,6 @@
 module.exports = function(grunt) {
   grunt.initConfig({
-    
+
     clean: ['dist'],
 
     ejs: {
@@ -34,7 +34,7 @@ module.exports = function(grunt) {
 
     less: {
       all: {
-        src: 'styles/**/*.less',
+        src: 'styles/**/style.less',
         dest: 'dist/style.css'
       }
     },
@@ -83,9 +83,9 @@ module.exports = function(grunt) {
   });
 
   require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
-  
+
   grunt.registerTask('default', ['clean', 'ejs', 'less', 'browserify', 'copy']);
-  
+
   grunt.registerTask('server', ['default', 'connect', 'watch']);
 
   grunt.registerTask('deploy', ['default', 'gh-pages']);

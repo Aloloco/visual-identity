@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Sound-Identity</title>
+  <title>visual-Identity</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h1 id="title">Sound-identity</h1>
-<p>A visual identity generator</p>
+<h1 id="title">visual-identity</h1>
+<p>A voice identity fingerprint generator</p>
 <p class="mic">Please allow microphone use</p>
 
 <div class="polycontainer">
@@ -18,7 +18,7 @@
 
 
 <div class="controls2">
-    <button class="blue button" id="save">SAVE .png</button>
+    <a class="blue button popup-modal" href="#save-modal" id="save">SAVE</a>
 </div>
 
 
@@ -30,6 +30,14 @@
     </div>
 </div>
 
+
+<div id="save-modal" class="mfp-hide white-popup-block">
+    <div class="image"></div>
+    <p>
+        <a class="button green publish" href="#">publish</a>
+        <a class="button red popup-modal-dismiss" href="#">Dismiss</a>
+    </p>
+</div>
 
 <script id="live-reload" src="http://localhost:35729/livereload.js"></script>
 <script src="app.js"></script>

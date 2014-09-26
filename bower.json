@@ -3,6 +3,8 @@
   "version": "0.0.0",
   "dependencies": {
     "firebase": "~1.0.24",
-    "dat.gui": "*"
+    "dat.gui": "*",
+    "magnific-popup": "~0.9.9",
+    "jquery": "~2.1.1"
   }
 }

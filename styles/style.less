@@ -37,75 +37,11 @@ body {
     display: none;
 }
 
-
-canvas.polygon , .timer {
-
+.image {
+    -webkit-box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.75);
+    -moz-box-shadow:    1px 1px 5px 0px rgba(50, 50, 50, 0.75);
+    box-shadow:         1px 1px 5px 0px rgba(50, 50, 50, 0.75);
 }
 
-@white: #fafafa;
-@blue: rgb(10, 150, 250);
-@red : rgb(250, 150, 10);
-@green : rgb(10, 250, 150);
-@light: #999999;
-@dark: #333333;
-
-.button {
-  border: 0 none;
-  border-radius: 2px 2px 2px 2px;
-  color: #FFFFFF;
-  cursor: pointer;
-  display: inline-block;
-  font-family: Arial,sans-serif;
-  font-size: 12px;
-  font-weight: bold;
-  line-height: 20px;
-  margin-bottom: 0;
-  margin-top: 10px;
-  padding: 7px 10px;
-  text-transform: none;
-  transition: all 0.3s ease 0s;
-  -moz-transition: all 0.3s ease 0s;
-  -webkit-transition: all 0.3s ease 0s;
-  width: 16.795%; /* auto */
-  text-align: center; /* DELETE WHEN WIDTH AUTO */
-  &.red {
-    background: none repeat scroll 0 0 @red;
-    color: @white;
-    &:hover {
-      background: none repeat scroll 0 0 @light;
-      color: @white;
-    }
-  }
-  &.dark {
-    background: none repeat scroll 0 0 @dark;
-    color: @white;
-    &:hover {
-      background: none repeat scroll 0 0 @blue;
-      color: @white;
-    }
-  }
-  &.light {
-    background: none repeat scroll 0 0 @light;
-    color: @white;
-    &:hover {
-      background: none repeat scroll 0 0 @dark;
-      color: @white;
-    }
-  }
-  &.green {
-    background: none repeat scroll 0 0 @green;
-    color: @white;
-    &:hover {
-      background: none repeat scroll 0 0 @dark;
-      color: @white;
-    }
-  }
-  &.blue {
-    background: none repeat scroll 0 0 @blue;
-    color: @white;
-    &:hover {
-      background: none repeat scroll 0 0 @dark;
-      color: @white;
-    }
-  }
-}
+@import "button";
+@import "popup";

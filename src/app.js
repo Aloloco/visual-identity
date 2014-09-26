@@ -17,6 +17,7 @@ var timeout;
 
 
 var gui = new dat.GUI();
+// Setup gui
 gui.close();
 
 gui.add(recorder.analyser, "minDecibels").min(-90).max(0).step(1);
@@ -46,8 +47,6 @@ cont.onclick = function (argument) {
 stopButton.onclick = function () {
     recorder.polyRunning = false;
 }
-
-
 
 
 function startTimer() {

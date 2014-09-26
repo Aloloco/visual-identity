@@ -1,13 +1,25 @@
 // annoyingly it sets Firebase to be a global.
 require('firebase');
 
+var $ = require('jquery');
+// PFFFFT FUCKING SHIT
+window.jQuery = $;
+window.$ = $;
+require('magnific-popup');
+
 var database = new Firebase('https://visual-identity.firebaseio.com/');
 
 var imagesRef = database.child("images");
 
+var currentRef = database.child("current");
+
 module.exports = {
 
     init: function (argument) {
+
+        // add a flag so we don't publish twice.
+        this.published = false;
+
         var canvas = document.querySelector('canvas.polygon');
         this.canvas = canvas;
         this.w = canvas.width;
@@ -15,7 +27,11 @@ module.exports = {
         this.ctx = canvas.getContext("2d");
         this.ctx.clearRect(0, 0, this.w, this.h);
 
-        this.saveButton = document.querySelector('button#save');
+        this.saveButton = document.querySelector('a#save');
+
+        this.publishButton = document.querySelector('a.publish');
+        this.publishButton.innerHTML = 'publish';
+        this.publishButton.onclick = this.publishFlower.bind(this);
 
         this.saveButton.onclick = this.saveFlower.bind(this);
 
@@ -27,6 +43,8 @@ module.exports = {
         this.hueSpeed = map_range(Math.random(), 0, 1, 0, 0.5);
 
         this.hue = Math.random() * (2 * Math.PI) * (180/Math.PI);
+
+        this.sendFrame();
     },
 
     createPolygon: function (spectrum) {
@@ -92,9 +110,14 @@ module.exports = {
         ctx.restore();
 
         this.initAngle -= this.angleSpeed;
+
+        this.sendFrame();
+
     },
 
     saveFlower: function () {
+
+
 
         var out = document.createElement('canvas');
         out.width = this.w;
@@ -107,12 +130,84 @@ module.exports = {
         outCtx.fill();
         outCtx.drawImage(this.canvas, 0, 0);
 
+
         var imgURI = out.toDataURL("image/png");
-        window.open(imgURI);
+
+        this.imgURI = imgURI;
+
+        var anchor = document.createElement('a');
+        anchor.href = imgURI;
+        anchor.download = new Date().toISOString() + '.png';
+
+        var img = document.createElement('img');
+        img.src = imgURI;
+
+        anchor.appendChild(img);
+
+
+        $('#save-modal .image').html(anchor);
+
+        $.magnificPopup.open({
+            items : {
+                type: 'inline',
+                src: '#save-modal',
+            },
+            modal: true
+        });
+
+        $(document).on('click', '.popup-modal-dismiss', function (e) {
+            e.preventDefault();
+            $.magnificPopup.close();
+        });
+
+
+
+    },
+
+
+    sendFrame: function() {
+
+        var out = document.createElement('canvas');
+        out.width = this.w;
+        out.height = this.h;
+
+        var outCtx = out.getContext("2d");
+        // white BG
+        outCtx.fillStyle ='rgb(255,255,255)';
+        outCtx.rect(0, 0, this.w, this.h);
+        outCtx.fill();
+        outCtx.drawImage(this.canvas, 0, 0);
+
+        var frame = out.toDataURL();
+
+        currentRef.set({
+            dataURI: frame
+        });
+
+    },
+
+
+    publishFlower: function() {
+
+        if (this.published) {
+            return;
+        }
+
+        var self = this;
 
         imagesRef.push({
-            date: new Date().toISOString(),
-            dataURI: imgURI
+                date: new Date().toISOString(),
+                dataURI: this.imgURI
+            }, function(error) {
+                if (error) {
+                    return console.error('could not publish!');
+                }
+
+                self.publishButton.innerHTML = 'published';
+
+                self.published = true;
+
+
         });
 
 
