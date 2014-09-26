@@ -1,3 +1,10 @@
+// annoyingly it sets Firebase to be a global.
+require('firebase');
+
+var database = new Firebase('https://visual-identity.firebaseio.com/');
+
+var imagesRef = database.child("images");
+
 module.exports = {
 
     init: function (argument) {
@@ -9,7 +16,6 @@ module.exports = {
         this.ctx.clearRect(0, 0, this.w, this.h);
 
         this.saveButton = document.querySelector('button#save');
-
 
         this.saveButton.onclick = this.saveFlower.bind(this);
 
@@ -67,7 +73,7 @@ module.exports = {
 
         ctx.closePath();
 
-        this.hue += this.hueSpeed ;
+        this.hue += this.hueSpeed % 360;
 
         ctx.fillStyle = "hsla(" + this.hue + ", 100%, 50%, " + this.inkAlpha + ")";
 
@@ -103,6 +109,13 @@ module.exports = {
 
         var imgURI = out.toDataURL("image/png");
         window.open(imgURI);
+
+        imagesRef.push({
+            date: new Date().toISOString(),
+            dataURI: imgURI
+        });
+
+
     }
 
 }
