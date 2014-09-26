@@ -15084,20 +15084,22 @@ gui.add(recorder.analyser, "minDecibels").min(-90).max(-11).step(1);
 gui.add(recorder.analyser, "maxDecibels").min(-10).max(30).step(1);
 gui.add(recorder.analyser, "smoothingTimeConstant").min(0.1).max(1).step(0.01);
 
+gui.add(recorder.poly, "resetSettings").listen();
+
 gui.add(recorder.poly, "angleSpeed").min(0).max(0.1).step(0.001).listen();
 gui.add(recorder.poly, "bgAlpha").min(0).max(0.01).step(0.0001).listen();
 gui.add(recorder.poly, "inkAlpha").min(0).max(0.1).step(0.0001).listen();
 gui.add(recorder.poly, "hueSpeed").min(0).max(1).step(0.001).listen();
 gui.add(recorder.poly, "hue").min(0).max(360).step(1).listen();
 
-gui.add(recorder.poly, "castFrame");
+gui.add(recorder.poly, "castFrame").listen();
 
 window.gui = gui;
 
 cont.onclick = function (argument) {
     clearInterval(interval);
     clearTimeout(timeout);
-    recorder.polyRunning = true;
+    recorder.recording = true;
     var idx = 5 + (Math.random() * 5 | 0);
     var size = Math.pow(2, idx);
     console.log(idx, size)
@@ -15107,7 +15109,7 @@ cont.onclick = function (argument) {
 }
 
 stopButton.onclick = function () {
-    recorder.polyRunning = false;
+    recorder.recording = false;
 }
 
 
@@ -15124,7 +15126,7 @@ function startTimer() {
 
     return setTimeout(function() {
         timerDiv.innerHTML = --count;
-        recorder.polyRunning = false;
+        recorder.recording = false;
         clearInterval(interval);
         timerDiv.style.display = 'none';
     }, 1000 * count);
@@ -15136,6 +15138,8 @@ function startTimer() {
 },{"./../bower_components/dat.gui/dat.gui.js":1,"./audioRecorder":6}],6:[function(require,module,exports){
 
 module.exports = {
+
+    recording: false,
 
     init: function() {
 
@@ -15241,15 +15245,18 @@ module.exports = {
             an.ctx.fillStyle = 'rgb(255,255,255)';
             an.ctx.fillRect(0, 0, W, H);
 
-            var barWidth = (W / bufferLength);// * 2.5; /// why 2.5?
+            var barWidth = (W / an.analyser.frequencyBinCount) * 2.5; /// why 2.5?
 
             var barHeight;
             var x = 0;
 
             for (var i = 0; i < bufferLength; i++) {
                 barHeight = an.dataArray[i];
-
-                an.ctx.fillStyle = 'rgba(40,' + (barHeight + 100) + ',' + barHeight + 100 + ', 0.3)';
+                if (an.recording) {
+                    an.ctx.fillStyle = 'rgba(' + barHeight + 150 + ',' + (barHeight + 100) + ', 40, 0.63)';
+                } else {
+                    an.ctx.fillStyle = 'rgba(40,' + (barHeight + 100) + ',' + barHeight + 100 + ', 0.1)';
+                }
                 an.ctx.fillRect( x, H - barHeight/2, barWidth, barHeight/2);
 
                 x += barWidth + 1;
@@ -15268,7 +15275,7 @@ module.exports = {
 
     runPoly: function() {
 
-        if (!this.polyRunning) {
+        if (!this.recording) {
             return;
         }
 
@@ -15325,6 +15332,13 @@ var currentRef = database.child("current");
 module.exports = {
     // publish the frame to the server (secret!)
     castFrame: false,
+    resetSettings: true,
+    initAngle: 0,
+    angleSpeed: map_range(Math.random(), 0, 1, 0, 0.025),
+    bgAlpha: 0.001,
+    inkAlpha: 0.025,
+    hueSpeed: map_range(Math.random(), 0, 1, 0, 0.5),
+    hue: Math.random() * (2 * Math.PI) * (180/Math.PI),
 
     init: function (argument) {
 
@@ -15347,14 +15361,16 @@ module.exports = {
 
         this.saveButton.onclick = this.saveFlower.bind(this);
 
-        this.initAngle = 0;
-        this.angleSpeed = map_range(Math.random(), 0, 1, 0, 0.025);
-        this.bgAlpha = 0.001;
-        this.inkAlpha = 0.025;
+        if (this.resetSettings) {
+            this.initAngle = 0;
+            this.angleSpeed = map_range(Math.random(), 0, 1, 0, 0.025);
+            this.bgAlpha = 0.001;
+            this.inkAlpha = 0.025;
 
-        this.hueSpeed = map_range(Math.random(), 0, 1, 0, 0.5);
+            this.hueSpeed = map_range(Math.random(), 0, 1, 0, 0.5);
 
-        this.hue = Math.random() * (2 * Math.PI) * (180/Math.PI);
+            this.hue = Math.random() * (2 * Math.PI) * (180/Math.PI);
+        }
 
         this.sendFrame();
     },
