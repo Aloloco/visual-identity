@@ -14,11 +14,14 @@ var imagesRef = database.child("images");
 var currentRef = database.child("current");
 
 module.exports = {
+    // publish the frame to the server (secret!)
+    castFrame: false,
 
     init: function (argument) {
 
         // add a flag so we don't publish twice.
         this.published = false;
+
 
         var canvas = document.querySelector('canvas.polygon');
         this.canvas = canvas;
@@ -166,6 +169,12 @@ module.exports = {
 
 
     sendFrame: function() {
+
+
+        if (!this.castFrame) {
+            return;
+        }
+        console.log('casting frame')
 
         var out = document.createElement('canvas');
         out.width = this.w;

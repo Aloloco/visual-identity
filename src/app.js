@@ -20,8 +20,8 @@ var gui = new dat.GUI();
 // Setup gui
 gui.close();
 
-gui.add(recorder.analyser, "minDecibels").min(-90).max(0).step(1);
-gui.add(recorder.analyser, "maxDecibels").min(-90).max(0).step(1);
+gui.add(recorder.analyser, "minDecibels").min(-90).max(-11).step(1);
+gui.add(recorder.analyser, "maxDecibels").min(-10).max(30).step(1);
 gui.add(recorder.analyser, "smoothingTimeConstant").min(0.1).max(1).step(0.01);
 
 gui.add(recorder.poly, "angleSpeed").min(0).max(0.1).step(0.001).listen();
@@ -29,6 +29,8 @@ gui.add(recorder.poly, "bgAlpha").min(0).max(0.01).step(0.0001).listen();
 gui.add(recorder.poly, "inkAlpha").min(0).max(0.1).step(0.0001).listen();
 gui.add(recorder.poly, "hueSpeed").min(0).max(1).step(0.001).listen();
 gui.add(recorder.poly, "hue").min(0).max(360).step(1).listen();
+
+gui.add(recorder.poly, "castFrame");
 
 window.gui = gui;
 
