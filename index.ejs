@@ -2,13 +2,34 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>visual-identity</title>
+  <title>Sound-Identity</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h1 id="title">visual-identity</h1>
+<h1 id="title">Sound-identity</h1>
 <p>A visual identity generator</p>
+<p class="mic">Please allow microphone use</p>
+
+<div class="polycontainer">
+    <canvas class="polygon" width="640" height="640"></canvas>
+    <div class="timer">Start</div>
+</div>
+
+
+<div class="controls2">
+    <button class="blue button" id="save">SAVE .png</button>
+</div>
+
+
+<div class="viz">
+    <canvas class="visualiser" width="640" height="100"></canvas>
+    <div class="controls">
+        <button id="start">start</button>
+        <button id="stop">stop</button>
+    </div>
+</div>
+
 
 <script id="live-reload" src="http://localhost:35729/livereload.js"></script>
 <script src="app.js"></script>
