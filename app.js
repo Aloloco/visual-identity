@@ -15080,8 +15080,8 @@ var gui = new dat.GUI();
 // Setup gui
 gui.close();
 
-gui.add(recorder.analyser, "minDecibels").min(-90).max(0).step(1);
-gui.add(recorder.analyser, "maxDecibels").min(-90).max(0).step(1);
+gui.add(recorder.analyser, "minDecibels").min(-90).max(-11).step(1);
+gui.add(recorder.analyser, "maxDecibels").min(-10).max(30).step(1);
 gui.add(recorder.analyser, "smoothingTimeConstant").min(0.1).max(1).step(0.01);
 
 gui.add(recorder.poly, "angleSpeed").min(0).max(0.1).step(0.001).listen();
@@ -15089,6 +15089,8 @@ gui.add(recorder.poly, "bgAlpha").min(0).max(0.01).step(0.0001).listen();
 gui.add(recorder.poly, "inkAlpha").min(0).max(0.1).step(0.0001).listen();
 gui.add(recorder.poly, "hueSpeed").min(0).max(1).step(0.001).listen();
 gui.add(recorder.poly, "hue").min(0).max(360).step(1).listen();
+
+gui.add(recorder.poly, "castFrame");
 
 window.gui = gui;
 
@@ -15321,11 +15323,14 @@ var imagesRef = database.child("images");
 var currentRef = database.child("current");
 
 module.exports = {
+    // publish the frame to the server (secret!)
+    castFrame: false,
 
     init: function (argument) {
 
         // add a flag so we don't publish twice.
         this.published = false;
+
 
         var canvas = document.querySelector('canvas.polygon');
         this.canvas = canvas;
@@ -15473,6 +15478,12 @@ module.exports = {
 
 
     sendFrame: function() {
+
+
+        if (!this.castFrame) {
+            return;
+        }
+        console.log('casting frame')
 
         var out = document.createElement('canvas');
         out.width = this.w;
