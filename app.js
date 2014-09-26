@@ -15331,7 +15331,7 @@ var currentRef = database.child("current");
 
 module.exports = {
     // publish the frame to the server (secret!)
-    castFrame: false,
+    castFrame: true,
     resetSettings: true,
     initAngle: 0,
     angleSpeed: map_range(Math.random(), 0, 1, 0, 0.025),
@@ -15372,11 +15372,12 @@ module.exports = {
             this.hue = Math.random() * (2 * Math.PI) * (180/Math.PI);
         }
 
-        this.sendFrame();
+        this.sendClearFrame();
     },
 
     createPolygon: function (spectrum) {
         var ctx = this.ctx;
+
 
         ctx.rect(0, 0, this.w, this.h);
         ctx.fillStyle = "rgba(255, 255, 255, " + this.bgAlpha + ")";
@@ -15424,23 +15425,21 @@ module.exports = {
         ctx.fillStyle = "hsla(" + this.hue + ", 100%, 50%, " + this.inkAlpha + ")";
 
         ctx.fill();
-
-        // ctx.beginPath();
-        // for (var i = 0; i < points.length; i++) {
-
-        //     p = points[i];
-        //     ctx.moveTo(0, 0)
-        //     ctx.lineTo(p[0], p[1]);
-        // }
-        // ctx.strokeStyle = "rgb(255, 255, 0)";
-        // ctx.stroke();
-
         ctx.restore();
 
+        this.sendFrameData({
+            w: this.w,
+            h: this.h,
+            points : points,
+            bgAlpha : this.bgAlpha,
+            inkAlpha: this.inkAlpha,
+            mid : mid,
+            currAngle : this.initAngle,
+            hue : this.hue,
+            clear:false
+        });
+
         this.initAngle -= this.angleSpeed;
-
-        this.sendFrame();
-
     },
 
     saveFlower: function () {
@@ -15492,6 +15491,25 @@ module.exports = {
 
     },
 
+    sendFrameData: function(data) {
+        if (!this.castFrame) {
+            return;
+        }
+
+        currentRef.set(data);
+
+    },
+
+    sendClearFrame: function() {
+        if (!this.castFrame) {
+            return;
+        }
+        currentRef.set({
+            clear: true,
+            w: this.w,
+            h: this.h
+        });
+    },
 
     sendFrame: function() {
 
