@@ -15397,8 +15397,8 @@ module.exports = {
 
             val = map_range(spectrum[i], 0, maxV, 0, mid - 50);
 
-            xPos = val * Math.sin(currAngle);
-            yPos = val * Math.cos(currAngle);
+            xPos = val * Math.sin(currAngle) || 0;
+            yPos = val * Math.cos(currAngle) || 0;
 
             points.push([xPos, yPos]);
 
@@ -15559,6 +15559,7 @@ module.exports = {
 
                 self.published = true;
 
+                self.sendClearFrame();
 
         });
 
