@@ -13,16 +13,18 @@ recorder.start();
 var timerDiv = document.querySelector('div.timer');
 
 var interval;
+var timeout;
 
 cont.onclick = function (argument) {
     clearInterval(interval);
+    clearTimeout(timeout);
     recorder.polyRunning = true;
     var idx = 5 + (Math.random() * 5 | 0);
     var size = Math.pow(2, idx);
     console.log(idx, size)
     recorder.analyser.fftSize = size;
     recorder.poly.init();
-    startTimer();
+    timeout = startTimer();
 }
 
 stopButton.onclick = function () {
