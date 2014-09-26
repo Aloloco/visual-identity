@@ -13,6 +13,12 @@
   display: inline-block;
   font-family: Arial,sans-serif;
   font-size: 12px;
+  @media only screen and (max-width : 768px) {
+    font-size: 30px;
+    line-height: 50px;
+    width: 45%;
+    padding: 14px, 20px;
+  }
   font-weight: bold;
   line-height: 20px;
   margin-bottom: 0;
@@ -23,7 +29,7 @@
   transition: all 0.3s ease 0s;
   -moz-transition: all 0.3s ease 0s;
   -webkit-transition: all 0.3s ease 0s;
-  width: 16.795%; /* auto */
+  width: 25%; /* auto */
   text-align: center; /* DELETE WHEN WIDTH AUTO */
   &.red {
     background: none repeat scroll 0 0 @red;

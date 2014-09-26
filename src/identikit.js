@@ -16,6 +16,13 @@ var currentRef = database.child("current");
 module.exports = {
     // publish the frame to the server (secret!)
     castFrame: false,
+    resetSettings: true,
+    initAngle: 0,
+    angleSpeed: map_range(Math.random(), 0, 1, 0, 0.025),
+    bgAlpha: 0.001,
+    inkAlpha: 0.025,
+    hueSpeed: map_range(Math.random(), 0, 1, 0, 0.5),
+    hue: Math.random() * (2 * Math.PI) * (180/Math.PI),
 
     init: function (argument) {
 
@@ -38,14 +45,16 @@ module.exports = {
 
         this.saveButton.onclick = this.saveFlower.bind(this);
 
-        this.initAngle = 0;
-        this.angleSpeed = map_range(Math.random(), 0, 1, 0, 0.025);
-        this.bgAlpha = 0.001;
-        this.inkAlpha = 0.025;
+        if (this.resetSettings) {
+            this.initAngle = 0;
+            this.angleSpeed = map_range(Math.random(), 0, 1, 0, 0.025);
+            this.bgAlpha = 0.001;
+            this.inkAlpha = 0.025;
 
-        this.hueSpeed = map_range(Math.random(), 0, 1, 0, 0.5);
+            this.hueSpeed = map_range(Math.random(), 0, 1, 0, 0.5);
 
-        this.hue = Math.random() * (2 * Math.PI) * (180/Math.PI);
+            this.hue = Math.random() * (2 * Math.PI) * (180/Math.PI);
+        }
 
         this.sendFrame();
     },

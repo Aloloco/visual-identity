@@ -1,6 +1,8 @@
 
 module.exports = {
 
+    recording: false,
+
     init: function() {
 
         // fork getUserMedia for multiple browser versions, for those
@@ -105,15 +107,18 @@ module.exports = {
             an.ctx.fillStyle = 'rgb(255,255,255)';
             an.ctx.fillRect(0, 0, W, H);
 
-            var barWidth = (W / bufferLength);// * 2.5; /// why 2.5?
+            var barWidth = (W / an.analyser.frequencyBinCount) * 2.5; /// why 2.5?
 
             var barHeight;
             var x = 0;
 
             for (var i = 0; i < bufferLength; i++) {
                 barHeight = an.dataArray[i];
-
-                an.ctx.fillStyle = 'rgba(40,' + (barHeight + 100) + ',' + barHeight + 100 + ', 0.3)';
+                if (an.recording) {
+                    an.ctx.fillStyle = 'rgba(' + barHeight + 150 + ',' + (barHeight + 100) + ', 40, 0.63)';
+                } else {
+                    an.ctx.fillStyle = 'rgba(40,' + (barHeight + 100) + ',' + barHeight + 100 + ', 0.1)';
+                }
                 an.ctx.fillRect( x, H - barHeight/2, barWidth, barHeight/2);
 
                 x += barWidth + 1;
@@ -132,7 +137,7 @@ module.exports = {
 
     runPoly: function() {
 
-        if (!this.polyRunning) {
+        if (!this.recording) {
             return;
         }
 
