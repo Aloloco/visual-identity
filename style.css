@@ -27,8 +27,15 @@ body {
   text-align: center;
   display: none;
 }
-.save-modal p.buttons {
+#save-modal p.buttons {
   text-align: center;
+}
+#save-modal div.form {
+  margin-top: 20px;
+  width: 100%;
+}
+#save-modal div.form input {
+  min-width: 300px;
 }
 .image {
   -webkit-box-shadow: 1px 1px 5px 0px rgba(50, 50, 50, 0.75);

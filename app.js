@@ -15547,8 +15547,11 @@ module.exports = {
 
         var self = this;
 
+
+
         imagesRef.push({
                 date: new Date().toISOString(),
+                title: $('input#title').val() || "untitled",
                 dataURI: this.imgURI
             }, function(error) {
                 if (error) {
