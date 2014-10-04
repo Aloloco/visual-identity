@@ -17,6 +17,8 @@ module.exports = {
     // publish the frame to the server (secret!)
     castFrame: true,
     resetSettings: true,
+    fromSpectrum: false,
+    shrink: false,
     initAngle: 0,
     angleSpeed: map_range(Math.random(), 0, 1, 0, 0.025),
     bgAlpha: 0.001,
@@ -44,6 +46,8 @@ module.exports = {
         this.publishButton.onclick = this.publishFlower.bind(this);
 
         this.saveButton.onclick = this.saveFlower.bind(this);
+
+        this.reducer = 0;
 
         if (this.resetSettings) {
             this.initAngle = 0;
@@ -79,7 +83,7 @@ module.exports = {
 
         for (var i = 0; i < spectrum.length; i++) {
 
-            val = map_range(spectrum[i], 0, maxV, 0, mid - 50);
+            val = map_range(spectrum[i], 0, maxV, 0, mid - (50 + this.reducer));
 
             xPos = val * Math.sin(currAngle) || 0;
             yPos = val * Math.cos(currAngle) || 0;
@@ -88,6 +92,11 @@ module.exports = {
 
             currAngle -= angle;
         }
+
+        if (this.shrink) {
+            this.reducer += this.hueSpeed;
+        }
+
 
         ctx.save();
         ctx.translate(mid, mid);
@@ -104,10 +113,20 @@ module.exports = {
 
         ctx.closePath();
 
-        this.hue += this.hueSpeed % 360;
+        var color = {};
+        if (this.fromSpectrum) {
+            color = this.hueFromSpectrum(spectrum);
+            this.hue = color.hue;
+        } else {
+            color.alpha = this.inkAlpha;
+            this.hue = (this.hue + this.hueSpeed) % 360;
+            color.hue = this.hue;
+        }
 
-        ctx.fillStyle = "hsla(" + this.hue + ", 100%, 50%, " + this.inkAlpha + ")";
 
+
+        ctx.fillStyle = "hsla(" + this.hue + ", 100%, 50%, " + color.alpha + ")";
+        ctx.fillStyle = this.hueFromSpectrum(spectrum);
         ctx.fill();
         ctx.restore();
 
@@ -116,15 +135,52 @@ module.exports = {
             h: this.h,
             points : points,
             bgAlpha : this.bgAlpha,
-            inkAlpha: this.inkAlpha,
+            inkAlpha: color.alpha,
             mid : mid,
             currAngle : this.initAngle,
-            hue : this.hue,
+            hue : color.hue,
             clear:false
         });
 
         this.initAngle -= this.angleSpeed;
     },
+
+    hueFromSpectrum: function(spectrum) {
+
+        var sum = 0;
+        var max = Number.MIN_VALUE;
+        var min = Number.MAX_VALUE;
+
+        var val, maxi, mini, i, l;
+        for (i = 0, l = spectrum.length; i < l; i++) {
+
+            val = spectrum[i];
+
+            if (val > max) {
+                max = val;
+                maxi = i;
+            }
+            if (val < min) {
+                min = val;
+                mini = i;
+            }
+
+            sum += val;
+        }
+
+        var hue = maxi/(l/2) * 360;
+        var avg = sum/l;
+        console.log("maxmin:", maxi, mini, "sum:", sum, "avg:", avg, "hue:", hue, "l:", l);
+
+        // return hue || 0;
+
+        return {
+            hue: hue || 0,
+            alpha: map_range(sum, 0, 2000, 0, this.inkAlpha)
+        };
+
+    },
+
 
     saveFlower: function () {
 

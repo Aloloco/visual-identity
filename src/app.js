@@ -33,6 +33,8 @@ gui.add(recorder.poly, "hueSpeed").min(0).max(1).step(0.001).listen();
 gui.add(recorder.poly, "hue").min(0).max(360).step(1).listen();
 
 gui.add(recorder.poly, "castFrame").listen();
+gui.add(recorder.poly, "fromSpectrum").listen();
+gui.add(recorder.poly, "shrink").listen();
 
 window.gui = gui;
 
@@ -40,10 +42,10 @@ cont.onclick = function (argument) {
     clearInterval(interval);
     clearTimeout(timeout);
     recorder.recording = true;
-    var idx = 5 + (Math.random() * 5 | 0);
-    var size = Math.pow(2, idx);
-    console.log(idx, size)
-    recorder.analyser.fftSize = size;
+    // var idx = 5 + (Math.random() * 5 | 0);
+    // var size = Math.pow(2, idx);
+    // console.log(idx, size)
+    // recorder.analyser.fftSize = size;
     recorder.poly.init();
     timeout = startTimer();
 }

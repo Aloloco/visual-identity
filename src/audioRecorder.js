@@ -41,6 +41,8 @@ module.exports = {
             this.identity[i] = 0;
         }
 
+        console.log("Bin Count", this.analyser.frequencyBinCount);
+
         // reference
         var an = this;
 
@@ -107,7 +109,7 @@ module.exports = {
             an.ctx.fillStyle = 'rgb(255,255,255)';
             an.ctx.fillRect(0, 0, W, H);
 
-            var barWidth = (W / an.analyser.frequencyBinCount) * 2.5; /// why 2.5?
+            var barWidth = (W / an.analyser.frequencyBinCount);/// * 2.5; /// why 2.5?
 
             var barHeight;
             var x = 0;
