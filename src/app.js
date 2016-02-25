@@ -1,3 +1,7 @@
+var host = "radiodario.github.io";
+if ((host == window.location.host) && (window.location.protocol != "https:"))
+    window.location.protocol = "https";
+
 var recorder = require('./audioRecorder');
 // var polykit = require('./identikit');
 var dat = require('dat.gui');
