@@ -15058,6 +15058,10 @@ $.magnificPopup.registerModule(RETINA_NS, {
 /*>>fastclick*/
  _checkInstance(); })(window.jQuery || window.Zepto);
 },{}],5:[function(require,module,exports){
+var host = "radiodario.github.io";
+if ((host == window.location.host) && (window.location.protocol != "https:"))
+    window.location.protocol = "https";
+
 var recorder = require('./audioRecorder');
 // var polykit = require('./identikit');
 var dat = require("./../bower_components/dat.gui/dat.gui.js");
